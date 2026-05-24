@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AssemblyName>Ets2Telemetry.AspNetCore</AssemblyName>
+    <RootNamespace>Funbit.Ets.Telemetry.Server</RootNamespace>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <Compile Include="Controllers\SkinController.cs" />
+    <Compile Include="Controllers\TelemetryController.cs" />
+    <Compile Include="Helpers\Ets2TelemetryJsonProvider.cs" />
+
+    <Compile Include="Startup.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Hubs\Ets2TelemetryHub.cs" />
+    <Compile Include="Data\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Ets2TestTelemetry.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Funbit.Ets.Telemetry.Data\Funbit.Ets.Telemetry.Data.csproj" />
+  </ItemGroup>
+</Project>

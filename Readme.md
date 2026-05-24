@@ -1,6 +1,11 @@
+# This is a personal fork of FunBit's work
+A lot of work is still needed, but atleast it works on linux :)
+
 ## ETS2 Telemetry Web Server 3.2.5 + Mobile Dashboard
 
-This is a free Telemetry Web Server for [Euro Truck Simulator 2](http://www.eurotrucksimulator2.com/) and [American Truck Simulator](http://www.americantrucksimulator.com/) written in C# based on WebSockets and REST API. The client side consists of a skinnable HTML5 mobile dashboard application that works in any modern desktop or mobile browser. Android users may also use provided native Android application.   
+This is a free Telemetry Web Server for [Euro Truck Simulator 2](http://www.eurotrucksimulator2.com/) and [American Truck Simulator](http://www.americantrucksimulator.com/) written in C# based on WebSockets and REST API.
+
+The client side consists of a skinnable HTML5 mobile dashboard application that works in any modern desktop or mobile browser.
 
 ## Main Features
 
@@ -13,91 +18,75 @@ This is a free Telemetry Web Server for [Euro Truck Simulator 2](http://www.euro
 
 ### Telemetry REST API
   
-    GET http://localhost:25555/api/ets2/telemetry
+Endpoint: `http://localhost:25555/api/ets2/telemetry`
 
 Returns structured JSON object with the latest telemetry data read from the game: 
 
-    {    
-		"game": {
-			"connected": true,
-			"paused": false,
-			"gameName": "ETS2",
-			"time": "0001-01-08T21:09:00Z",
-			"timeScale": 19.0,
-			"nextRestStopTime": "0001-01-01T10:11:00Z",
-			"version": "1.10",
-			"telemetryPluginVersion": "7"
-		},
-		"truck":{
-			"id": "man",
-			"make": "MAN",
-			"model": "TGX",
-			"speed": 53.82604,
-			... 
-    }
+```json
+{    
+	"game": {
+		"connected": true,
+		"paused": false,
+		"gameName": "ETS2",
+		"time": "0001-01-08T21:09:00Z",
+		"timeScale": 19.0,
+		"nextRestStopTime": "0001-01-01T10:11:00Z",
+		"version": "1.10",
+		"telemetryPluginVersion": "7"
+	},
+	"truck":{
+		"id": "man",
+		"make": "MAN",
+		"model": "TGX",
+		"speed": 53.82604,
+		... 
+}
+```
 
 The state is updated upon every API call. You may use this REST API for your own Applications. 
 
-**The complete telemetry property reference is available [here](Telemetry.md).**
+**The complete telemetry property reference is available [here](./docs/Telemetry.md).**
 
 Please note that GET responses may be cached by your HTTP client. To avoid caching you may use some random query string parameter or POST method which returns exactly the same result.
 
 ### HTML5 Mobile Dashboard Application
-    http://localhost:25555/
+Endpoint: `http://localhost:25555/`
 
-This HTML5 dashboard application is designed for mobile and desktop browsers. You should be able to use the dashboard just by navigating to the URL in your Mobile Safari (iOS 8+), Android 4+ browsers (Default or Chrome) or any modern desktop browser. 
+This HTML5 dashboard application is designed for mobile and desktop browsers.
+
+You should be able to use the dashboard just by navigating to the URL on either your phone, desktop, or another computer connected to the same network. 
 
 Here is a screenshot of how your mobile dashboard will look like in a browser:
 
 ![](https://raw.githubusercontent.com/Funbit/ets2-telemetry-server/master/source/Funbit.Ets.Telemetry.Mobile/skins/default/dashboard.jpg)
 
-The package contains other photo realistic skins as well. For example, this is a skin for MAN-TGX:
+As you can see dashboard design is completely customizable. With some basic knowledge of the HTML and CSS you can create your own skins.
 
-![](https://raw.githubusercontent.com/Funbit/ets2-telemetry-server/master/server/Html/skins/man-tgx/dashboard.jpg)
-
-As you can see dashboard design is completely customizable. With some basic knowledge of the HTML and CSS you can create your own skins. See Dashboard skin tutorial below for more information. 
+See Dashboard skin tutorial below for more information. 
 
 ## Setup
 
-### Supported OS
+### Supported OSes
 
-- **Windows Vista, Windows 7, 8 or 10 (32-bit or 64-bit)**. Windows XP is not supported.
-- **.NET Framework 4.5** (pre-installed in Windows 8+). If it is not installed you will be prompted to install it when you run the server. 
+Native plugin:
+- Windows 10+ (32-bit and 64-bit) (though if you are running 10+ on 32-bit you should not.)
+- Linux (Tested on Arch Linux 6.18.9-arch1-2)
 
 ### Supported games
 
-- Euro Truck Simulator 2 (32-bit or 64-bit) version 1.15+ (Steam or Standalone). Multiplayer versions are supported as well. 
-- American Truck Simulator (Steam or Standalone)
+- Euro Truck Simulator 2 version 1.15+ (Steam and Standalone)
+- American Truck Simulator (Steam and Standalone)
 
 ### Tested browsers
 
-- iOS 8+ running Mobile Safari (highly recommended, best user experience)
-- Latest Firefox, Chrome or IE11 (Firefox or Chrome is recommended though)
-- Android 4+ (4.4+ highly recommended) Default or Chrome browsers (see FAQ if you have performance issues)
+- Literally any made within the last year
 
 ### Installation
+TODO
 
-1. Download bundle by clicking **Download ZIP** button at the right side of this page. 
-2. **Unpack downloaded ZIP** file *anywhere* you want.
-3. Run **server\Ets2Telemetry.exe** 
-4. Click "**Install**" button to perform the installation 
-5. When installation finishes click "**OK**", select your network interface and click "**HTML5 App URL**" link to open your dashboard
-6. **Done** (now you may read *Usage* topic to understand how to use the server)
-
-Android users may install the provided "Ets2 Dashboard" application. The APK file is located in **mobile/Android/Ets2Dashboard.apk**. Copy it to your device and install via Android's File Manager. The application will prevent your device from going into sleep mode and will remember server IP address which is very useful if you are going to use the app frequently.
-
-***Security notes***: The installation must be done only once and requires Administrator privileges. If you mind what exactly server does to the system at this point here is the detailed information:
-
-1. Tries to find your ETS2 game directory and copy ets2-telemetry-server.dll plugin there
-2. Creates a new Firewall rule for 25555 port named "ETS2 TELEMETRY SERVER (PORT 25555)" opened only for local subnet (i.e. it won't be visible from Internet, so you are safe)
-3. Creates a new ACL rule for HTTP URL bound on 25555 port for OWIN's HttpListener ([more details](http://msdn.microsoft.com/en-us/library/ms733768%28v=vs.110%29.aspx))
-4. Creates a new file for storing application settings inside "\Users\USERNAME\AppData\Local\Ets2 Telemetry Server".
-
-The server also reports everything to the log file (Ets2Telemetry.log), so you may see the details there as well.
-
-Also, if you don't trust my compiled ets2-telemetry-server.dll you may compile it by yourself using [plugin's source code](https://github.com/Funbit/ets2-sdk-plugin) and Visual Studio 2013+.
 
 ### Skin Installation
+TODO: explain this better, should be broken out into a wiki or `docs/` page.
 
 If you downloaded some third-party skin (which is folder, containing dashboard.html, css, js and image files, but **no EXE files**!) you may install it just by **copying to server/Html/skins** directory. It should appear in the skin menu as soon as you refresh your browser.
 
@@ -108,24 +97,11 @@ If you already have a previous version installed, it is recommended to leave it 
 However, please keep in mind that if you plan to return back to previous version you have to uninstall the latest one first!
 
 ### Uninstallation
+TODO
 
-If server hasn't fulfilled your expectations and you decide to uninstall it, then:
-
-1. Exit from the Euro Truck Simulator / American Truck Simulator
-2. Select from the server's menu: Server -> Uninstall
-3. Click "**Uninstall**" button in the popped up window
-4. **Done**
-
-At this moment your system will be in exactly the same state as it were before the installation. 
 
 ## Usage
-
-1. Run **server/Ets2Telemetry.exe**  
-2. Run Euro Truck Simulator 2 / American Truck Simulator.
-3. **Desktop users**: connect your notebook to the same Wi-Fi/LAN network as your PC, open Firefox, Chrome or IE and navigate to the "*HTML5 App URL*" displayed by the server. 
-3. **iOS users**: connect your iPhone or iPad to the same Wi-Fi network as your PC, open Safari and navigate to the "*HTML5 App URL*" displayed by the server. 
-4. **Android users**: run "*Ets2 Dashboard*" application, enter server IP (*without http and port*, exactly in the same format as displayed by the server) and press OK. If IP address is correct it will be remembered for the next time.
-5. **Enjoy** your mobile dashboard while playing your favorite simulator! ;)
+TODO
 
 ## FAQ
 
@@ -169,192 +145,8 @@ No. There is a chance that it will work, but it won't be supported.
 
 Starting from version 3.0.0 this is possible, but I haven't yet had time to update the default skins to display it. But I will ;)
 
-## Dashboard skin tutorial
 
-The tutorial is included in the ZIP package (see "Dashboard Skin Tutorial.pdf"). You may download it separately from [here](https://raw.githubusercontent.com/Funbit/ets2-telemetry-server/master/Dashboard%20Skin%20Tutorial.pdf).
-
-## Support
-
-The ETS2 Telemetry Web Server has evolved into a pretty complex open-source project that requires singificant amount of time to support. If you are interested in its future you may provide the author with some material support by clicking the button below.
-
-[![](https://raw.githubusercontent.com/Funbit/ets2-telemetry-server/master/server/Html/images/donate-link.png)](http://funbit.info/ets2/donate.htm)
-
-Thank you!
-
-## Version history
-
-### 3.2.5
-
-- Another improvement for job information reset code (plugin DLL update).
-
-### 3.2.4
-
-- Added support for SVG, GIF, TTF and WOFF content types.
-
-### 3.2.3
-
-- Added support for up to 9 levels of sub directories for skins to use (previous version allowed only 5).
-- Minor code refactoring.
-
-### 3.2.2
-
-- Fixed occasional bug in latest job information reset code (new job info might have been reset).
-
-### 3.2.1
-
-- Updated telemetry plugin DLL and fixed job information reset when job is done (trailer detached).
-- Added support for sending UserId/Password for telemetry broadcaster to allow user identification.
-- Fixed typo in property name: adblueAverageConsumption (was adblueAverageConsumpton).
-
-### 3.2.0
-
-- Added support for American Truck Simulator
-- Added two new skins: MAN TGX (MPH) and Peterbilt 579 by NightstalkerPL, Lisek Chytrusek (by WEBX.PL)
-- Added application menu to ease uninstallation and extending for future updates
-- Added new GameName property to the telemetry (proposed by mkoch227)
-- Fixed CPU overhead issue for some users (when CPU goes above 1%)
-- Updated all project files for Visual Studio 2015 and C# 6.0
-
-### 3.0.7
-
-- Fixed 'Dynamic' skin size display issue.
-
-### 3.0.6
-
-- Fixed minor bug in the telemetry plugin with wrong hshifter.selector usage.
-- Added new 'Dynamic' skin size type, cursor fixes and other refactorings (thanks to denilsonsa & Phil0499!).
-
-### 3.0.5
-
-- Removed small visual padding around skins. Now skins takes full canvas space (thanks to James).
-- Fixed rounding problem with speed limit value, sometimes it was displayed as 79 instead of 80, etc (thanks to R0adrunner).
-
-### 3.0.4
-
-- Restored truck.engineOn property (separated from truck.electricOn).
-
-### 3.0.3
-
-- Removed truck.engineOn property which was a duplicate for truck.electricOn property causing it not to work properly inside the telemetry plugin (thanks to ivanrichwalski).
-
-### 3.0.2
-
-- Fixed bug with parsing date-min/max HTML attributes.
-- Changed property name format inside date-min/max HTML attributes, object separation character was changed from '-' to '.', for example: **date-max="truck-fuelCapacity"** must be changed to: **date-max="truck.fuelCapacity"**. 
-
-### 3.0.1
-
-- Fixed iOS Safari window reload bug (window gets reloaded several times in a row).
-- Added new skin "rd-info" created by van_argiano. Thank you very much!
-
-### 3.0.0
-
-- Changed telemetry JSON object structure by introducing complex nested types. If you develop or use 3rd party custom skin please note that it will not work as is with the new server version! You will have to update your skin files first. I have created a handy tool that will do 99% (or usually even 100%) work for you. You may [download the tool here](http://funbit.info/ets2/Telemetry-Dashboard-3.0.0-Skin-Upgrader.zip). Just drop your skin files to the  SkinFileUpgrader.exe and you will get the updated version of it (you need to upgrade dashboard.html, css and js files). The source code is included in the ZIP files as well, just in case.
-- New telemetry JSON structure. All properties are now structurized in several categories: game, truck, trailer, job and navigation. To understand the new system better please refer to the [updated skin tutorial](https://raw.githubusercontent.com/Funbit/ets2-telemetry-server/master/Dashboard%20Skin%20Tutorial.pdf) and [complete telemetry property reference](Telemetry.md). 
-- Removed hasJob property. You should use *trailer.attached* property instead (or add a custom *data.hasJob = data.trailer.attached;* to your dashboard.js).
-- Added support for new telemetry properties: game.nextRestStopTime, game.timeScale, truck.forwardGears, truck.reverseGears, navigation.estimatedTime, navigation.estimatedDistance, navigation.speedLimit.
-- Added [complete telemetry property reference](Telemetry.md). 
-- Fixed aux light indicators (roof and front indicators didn't work)
-- [Forked ETS2 telemetry plugin](https://github.com/Funbit/ets2-sdk-plugin) to make it a custom part of the server.
-- Some bug fixes and improvements.
-
-### 2.2.6
-
-- Fixed trailerAttached property so it is properly changed when trailer is attached/detached. 
-- Changed hasJob property, now it equals to the trailerAttached value.
-- Fixed odometer for default MPH skin (was showing kilometers) *(thanks to kevindwood)* 
-
-### 2.2.5
-
-- Fixed truck speed rounding to avoid jumps between 0 and 1 km/h 
-- Created new MPH version of the default skin
-- Fixed minor bug with cruise control speed displayed as NaN sometimes (default skin)
-
-### 2.2.4
-
-- Fixed speedometer for Scania and Volvo skins (made the needle movement smoother) 
-- Fixed floating point rendering (truck speed sometimes might have been displayed as XX.YYYY) *(big thanks to Jorji_costava and sketch)*
-
-### 2.2.3
-
-- Fixed speedometer for all built-in skins (DAF, MAN, Mercedes, Volvo)
-- Implemented automatic window reloading on resize (for PC) *(greetings to denilsonsa)*
-- Added skin ability to control user clicks (back to menu link moved to dashboard.js) *(greetings to mkoch227)*
-- Changed speed rounding algorithm to match game's speed *(greetings to 
-maysaraahmad)*
-- Minor comment and typo fixes
-
-### 2.2.2
-
-- Fixed bug in Android APK (no IP address prompt)
-- Fixed Scania skin (invalid speed limit)
-
-### 2.2.1
-
-- Completely revamped dashboard core, including rendering and connection layers. The mobile dashboard now reflects game changes almost instantly (within 5-10ms)!
-- Removed refreshRate option (now it is adjusted automatically)
-- Fixed fuelWarning telemetry property (updated telemetry plugin DLL)
-- Fixed NaN trailer mass when dashboard is disconnected (default skin only)
-- Added some utility functions to dashboard.js (see Skin Tutorial for more info)
-- Added new server status: "Connected to Ets2TestTelemetry.json"
-
-### 2.2.0
-
-- Added Dashboard Skin Tutorial!
-- Fixed support for Cruise Control indicator and added Cruise Control Speed
-- Fixed deadline time bug
-- Made speed value always positive (even when reversing)
-- Significantly improved skin loading speed
-- Added ability to skip certain setup steps to support 3rd-party firewalls
-- Added ability to manually select ETS2 game path using standard UI when it is not detected automatically
-- Added wear indicators to the default skin
-- Added additional status message to check if server is connected to the telemetry plugin
-- Added 5 new photo realistic skins made by Klauzzy (DAF-XF, MAN-TGX, Mercedes-Atego, Scania, Volvo-FH)
-- Added simple template skin
-- Changed telemetry plugin DLL name from ets2-telemetry.dll to ets2-telemetry-server.dll (previous version is not compatible anymore)
-- Various refactoring and improvements
-
-### 2.1.0
-
-- Moved to WebSockets for low-latency data updates
-- Optimized UI animation (now it is SUPER SMOOTH, especially in Desktop and Mobile Safari browsers)  
-- Minor fixes
-
-### 2.0.0
-
-- Completely rewritten client side application. All code is now written in Typescript. 
-- Full support for custom skins
-- Automated server installer
-- Telemetry broadcasting to external URLs (see Ets2Telemetry.exe.config)
-- Updated default dashboard skin
-- Administrator rights are now required only for installation. Server starts under user privileges.
-
-### 1.0.4
-
-- Added server IP to the server window
-- Minor logging improvements
-- Fixed IE behavior with ajax requests (should fix Windows Phone issues)
-
-### 1.0.3
-
-- Fixed bug with invalid day of the week
-- Improved connection stability
-- Completely decoupled gauge design and gauge update engine (coded in Typescript)
-- Added some scripts to simplify the installation
-
-### 1.0.2
-- Refactored gauge screen fitting algorithm, the app should work in any modern browser now 
-- Added logging
-- Added support for binding on a particular network interface
-- Added Cordova mobile application (compiled Android APK is included in the bundle)
-- Various fixes and improvements
-- Made HTML5 application URL shorter
-
-### 1.0.1
-- Fixed bug with multiple network interfaces (thanks to thorerik)
-- Made application run under Administrator by default (thanks to thorerik)
-- Updated application icon and added it to the HTML app
-- Minor refactoring and bug fixes 
+## [Changelog](./CHANGELOG.md)
 
 ## External links
 
